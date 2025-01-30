@@ -1,0 +1,15 @@
+{
+  "default": true,
+  "MD040": false,
+  "heading-whitespace": false,
+  "heading-style": {
+    "style": "atx"
+  },
+  "no-trailing-punctuation": false,
+  "line-length": false,
+  "no-multiple-blanks": true,
+  "ordered-list-marker-value": "one",
+  "list-indent": false,
+  "strong-style": "consistent",
+  "emphasis-style": "consistent"
+}
