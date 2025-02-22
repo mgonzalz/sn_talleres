@@ -1,22 +1,19 @@
-VENV=venv
-BIN=$(VENV)/Scripts
+PYTHON=python
+VENV_DIR=env
+ACTIVATE= . $(VENV_DIR)/Scripts/activate
 
-# Creación del entorno virtual e instalación de dependencias
-install:
-	python -m venv $(VENV)
-	$(BIN)/python -m pip install --upgrade pip
-	$(BIN)/python -m pip install -r requirements.txt
+.PHONY: set-permissions
+set-permissions: # Setear permisos para ejecutar PowerShell como administrador.
+	PowerShell -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force"
 
-activate-cmd: # Activar en CMD
-	$(BIN)/activate.bat
+venv: set-permissions # Creación de un entorno virtual.
+	$(PYTHON) -m venv $(VENV_DIR)
+	$(ACTIVATE) && $(PYTHON) -m pip install --upgrade pip
 
-activate-ps: # Activar en PowerShell
-	$(BIN)/Activate.ps1
+install: venv # Instalación de dependencias.
+	$(ACTIVATE) && $(PYTHON) -m pip install -r requirements.txt
 
-activate-bash: # Activar en Git Bash (Windows)
-	.$(VENV)/Scripts/activate
+clean: # Limpiar archivos.
+	rm -rf $(VENV_DIR)
 
-clean:
-	- rm -rf $(VENV) __pycache__ 2>/dev/null || rmdir /s /q $(VENV) __pycache__
-
-reset: clean install
+reset: clean venv install # Limpiar y reinstalar dependencias.
